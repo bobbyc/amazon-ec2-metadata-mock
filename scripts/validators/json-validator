@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-JSON_FILES=$(find $SCRIPTPATH/../ -name "*.json" -type f)
+JSON_FILES=$(find $SCRIPTPATH/../ -name "*.json" -type f -not -path "$SCRIPTPATH/../.*" )
 
 for j in $JSON_FILES; do
   echo "validating $j"
