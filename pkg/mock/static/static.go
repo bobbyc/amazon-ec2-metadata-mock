@@ -67,14 +67,18 @@ func RegisterHandlers(config cfg.Config) {
 		mdValueFieldName := mdValues.FieldByName(pathFieldName)
 		if mdValueFieldName.IsValid() {
 			path := pathValues.Field(i).Interface().(string)
+			path2 := pathValues.Field(i).Interface().(string) + "/"
 			value := mdValueFieldName.Interface()
 			if path != "" && value != nil {
 				// Ex: "/latest/meta-data/instance-id" : "i-1234567890abcdef0"
 				supportedPaths[path] = value
+				supportedPaths[path2] = value
 				if config.Imdsv2Required {
 					server.HandleFunc(path, imdsv2.ValidateToken(Handler))
+					server.HandleFunc(path2, imdsv2.ValidateToken(Handler))
 				} else {
 					server.HandleFunc(path, Handler)
+					server.HandleFunc(path2, Handler)
 				}
 			} else {
 				log.Printf("There was an issue registering path %v with mdValue: %v", path, value)
